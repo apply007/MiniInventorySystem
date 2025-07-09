@@ -6,7 +6,7 @@ using MiniInventorySystem.Model;
 
 namespace MiniInventorySystem.Controllers
 {
-    
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
