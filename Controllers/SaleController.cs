@@ -9,7 +9,7 @@ using static MiniInventorySystem.DTO.SaleRequestDTO;
 
 namespace MiniInventorySystem.Controllers
 {
-    [Authorize]
+
     [Route("api/[controller]")]
     [ApiController]
     public class SaleController : ControllerBase
@@ -28,8 +28,12 @@ namespace MiniInventorySystem.Controllers
         {
             try
             {
-                await _service.CreateSaleAsync(saleDto);
+               var saleStatus= await _service.CreateSaleAsync(saleDto);
+                if (saleStatus)
+                {                
                 return Ok(new { message = "Sale completed successfully" });
+                }
+                return BadRequest();
             }
             catch (InvalidOperationException ex)
             {
@@ -51,13 +55,14 @@ namespace MiniInventorySystem.Controllers
                 .ToListAsync();
 
             var totalSalesQty = sales.SelectMany(s => s.SaleDetails).Sum(d => d.Quantity);
-            var totalRevenue = sales.Sum(s => s.TotalAmount);
+            var totalAmount = sales.Sum(s => s.TotalAmount);
+            var totalDue = sales.Sum(s=>s.DueAmount);
             var numberOfTransactions = sales.Count;
 
             var report = new SalesReportDTO
             {
                 TotalSales = (int)totalSalesQty,
-                TotalRevenue = totalRevenue,
+                TotalRevenue = totalAmount-totalDue,
                 NumberOfTransactions = numberOfTransactions
             };
 

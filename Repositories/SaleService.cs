@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using MiniInventorySystem.Data;
 using MiniInventorySystem.Interfaces;
 using MiniInventorySystem.Model;
@@ -28,6 +29,15 @@ namespace MiniInventorySystem.Repositories
             {
                 await Task.Delay(3000); // Simulate delay
 
+                //  Check if Customer exists
+                var customerExists = await _context.Customers
+                    .AnyAsync(c => c.CustomerId == saleDto.CustomerId && !c.IsDeleted);
+
+                if (!customerExists)
+                {
+                    throw new InvalidOperationException($"Customer with ID {saleDto.CustomerId} does not exist.");
+                }
+
                 var sale = new Sale
                 {
                     CustomerId = saleDto.CustomerId,
@@ -38,15 +48,21 @@ namespace MiniInventorySystem.Repositories
 
                 foreach (var item in saleDto.Items)
                 {
-                    var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == item.ProductId && !p.IsDeleted);
-                    if (product == null || product.StockQty < item.Quantity)
+                    var product = await _context.Products
+                        .FirstOrDefaultAsync(p => p.ProductId == item.ProductId && !p.IsDeleted);
+
+                    if (product == null)
+                    {
+                        throw new InvalidOperationException($"Product with ID {item.ProductId} does not exist.");
+                    }
+
+                    if (product.StockQty < item.Quantity)
                     {
                         throw new InvalidOperationException($"Insufficient stock for product ID {item.ProductId}");
                     }
 
                     product.StockQty -= item.Quantity;
 
-                    
                     sale.SaleDetails.Add(new SaleDetail
                     {
                         ProductId = item.ProductId,
@@ -59,11 +75,13 @@ namespace MiniInventorySystem.Repositories
                 await _context.SaveChangesAsync();
                 return true;
             }
+            catch (Exception ex) {  Console.WriteLine(ex); return false; }
             finally
             {
                 _saleLock.Release();
             }
         }
+
 
 
 
