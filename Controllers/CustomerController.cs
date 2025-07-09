@@ -72,15 +72,23 @@ namespace MiniInventorySystem.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("EditCustomer/{id}")]
         public async Task<IActionResult> Update(int id, Customer customer)
         {
-            var updated = await _repo.UpdateAsync(id, customer);
-            if (updated == null) return NotFound();
-            return Ok(updated);
+            try
+            {
+                var updated = await _repo.UpdateAsync(id, customer);
+                if (updated == null) return NotFound();
+                return Ok(updated);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex);
+            }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteCustomer/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _repo.DeleteAsync(id);

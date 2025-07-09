@@ -22,6 +22,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //All Repository
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ISaleService, SaleService>();
 
 //jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

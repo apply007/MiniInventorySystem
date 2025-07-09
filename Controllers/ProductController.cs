@@ -18,7 +18,23 @@ namespace MiniInventorySystem.Controllers
         {
             _productRepository = productRepository;
         }
+        [HttpGet("list")]
+        public async Task<IActionResult> GetProducts(
+    string? search = null,
+    string? category = null,
+    int page = 1,
+    int pageSize = 10)
+        {
+            var (items, totalCount) = await _productRepository.GetFilteredProductsAsync(search, category, page, pageSize);
 
+            return Ok(new
+            {
+                totalCount,
+                page,
+                pageSize,
+                items
+            });
+        }
         [HttpGet("GetAllProduct")]
         public async Task<IActionResult> GetAllProduct()
         {
@@ -50,10 +66,10 @@ namespace MiniInventorySystem.Controllers
                 throw ex;
             }
 
-           
+
         }
-        
-        
+
+
         [HttpPost("AddProduct")]
         public async Task<IActionResult> AddProduct([FromBody] Product product)
         {
@@ -77,10 +93,39 @@ namespace MiniInventorySystem.Controllers
             }
 
            
+
+
+        }
+        [HttpPut("EditProduct/{id}")]
+        public async Task<IActionResult> Update(int id, Product product)
+        {
+            try
+            {
+                var updated = await _productRepository.UpdateAsync(id, product);
+                if (updated == null) return NotFound();
+                return Ok(updated);
+            }
+            catch (Exception ex)
+            {
+               return BadRequest(ex);
+            
+            }
         }
 
-
-
+        [HttpDelete("DeleteProduct/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var deleted = await _productRepository.DeleteAsync(id);
+                if (!deleted) return NotFound();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
 
 

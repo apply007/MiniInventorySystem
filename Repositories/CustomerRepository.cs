@@ -37,7 +37,18 @@ namespace MiniInventorySystem.Repositories
 
         public async Task<Customer?> UpdateAsync(int id, Customer customer)
         {
-              
+            var existing = await _context.Customers.FindAsync(id);
+            if (existing == null || existing.IsDeleted)
+                return null;
+
+            existing.FullName = customer.FullName;
+            existing.Phone = customer.Phone;
+            existing.Email = customer.Email;
+            existing.LoyaltyPoints = customer.LoyaltyPoints;
+
+            await _context.SaveChangesAsync();
+            return existing;
+
         }
 
         public async Task<bool> DeleteAsync(int id)

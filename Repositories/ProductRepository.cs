@@ -13,6 +13,27 @@ namespace MiniInventorySystem.Repositories
         {
           _context = context;
         }
+
+        public async Task<(List<Product> Items, int TotalCount)> GetFilteredProductsAsync(string? search, string? category, int page, int pageSize)
+        {
+            var query = _context.Products
+                .Where(p => !p.IsDeleted && p.Status == true)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+                query = query.Where(p => p.Name.Contains(search) || p.Barcode.Contains(search));
+
+            if (!string.IsNullOrEmpty(category))
+                query = query.Where(p => p.Category == category);
+
+            var totalCount = await query.CountAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _context.Products
