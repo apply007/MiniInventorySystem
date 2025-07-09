@@ -30,18 +30,18 @@ A simple yet scalable Inventory Management API with JWT authentication, CRUD for
 
 ## 🧑‍💻 Setup Instructions
 
-### 1️⃣ Clone the project
+###  Clone the project
 
 ```bash
 git clone https://github.com/apply007/MiniInventorySystem.git
 cd MiniInventorySystem
 ```
 
-### 2️⃣ Open in Visual Studio
+###  Open in Visual Studio
 
 - Open `MiniInventorySystem.sln`
 
-### 3️⃣ Database setup
+###  Database setup
 
 - Make sure **SQL Server** is installed & running.
 - Change connection string in `appsettings.json` if needed:
@@ -52,7 +52,7 @@ cd MiniInventorySystem
 }
 ```
 
-### 4️⃣ Run database migration (via Package Manager Console)
+###  Run database migration (via Package Manager Console)
 
 ```bash
 Update-Database
