@@ -8,3 +8,11 @@ obj/
 .env
 appsettings.Development.json
 appsettings.*.json.user
+/Migrations/20250708182615_initMigration.cs
+/Migrations/20250708182615_initMigration.Designer.cs
+/Migrations/20250708183248_initMigration2.cs
+/Migrations/20250708183248_initMigration2.Designer.cs
+/Migrations/20250708202544_addProductValidation.cs
+/Migrations/20250708202544_addProductValidation.Designer.cs
+/Migrations/20250708182615_initMigration.cs
+/Migrations/20250708182615_initMigration.cs
