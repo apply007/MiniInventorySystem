@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MiniInventorySystem.Migrations
 {
     /// <inheritdoc />
-    public partial class initMigration : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,7 @@ namespace MiniInventorySystem.Migrations
                 {
                     CustomerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LoyaltyPoints = table.Column<int>(type: "int", nullable: false),
@@ -70,28 +70,27 @@ namespace MiniInventorySystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SaleDetails",
+                name: "SaleDetail",
                 columns: table => new
                 {
                     SaleDetailId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SaleId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    ProductsProductId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SaleDetails", x => x.SaleDetailId);
+                    table.PrimaryKey("PK_SaleDetail", x => x.SaleDetailId);
                     table.ForeignKey(
-                        name: "FK_SaleDetails_Products_ProductsProductId",
-                        column: x => x.ProductsProductId,
+                        name: "FK_SaleDetail_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SaleDetails_Sales_SaleId",
+                        name: "FK_SaleDetail_Sales_SaleId",
                         column: x => x.SaleId,
                         principalTable: "Sales",
                         principalColumn: "SaleId",
@@ -99,13 +98,13 @@ namespace MiniInventorySystem.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_SaleDetails_ProductsProductId",
-                table: "SaleDetails",
-                column: "ProductsProductId");
+                name: "IX_SaleDetail_ProductId",
+                table: "SaleDetail",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SaleDetails_SaleId",
-                table: "SaleDetails",
+                name: "IX_SaleDetail_SaleId",
+                table: "SaleDetail",
                 column: "SaleId");
 
             migrationBuilder.CreateIndex(
@@ -118,7 +117,7 @@ namespace MiniInventorySystem.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "SaleDetails");
+                name: "SaleDetail");
 
             migrationBuilder.DropTable(
                 name: "Products");

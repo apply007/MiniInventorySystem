@@ -36,7 +36,8 @@ namespace MiniInventorySystem.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

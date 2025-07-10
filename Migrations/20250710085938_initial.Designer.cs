@@ -12,8 +12,8 @@ using MiniInventorySystem.Data;
 namespace MiniInventorySystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250708182615_initMigration")]
-    partial class initMigration
+    [Migration("20250710085938_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,8 @@ namespace MiniInventorySystem.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -56,7 +57,7 @@ namespace MiniInventorySystem.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("MiniInventorySystem.Model.Products", b =>
+            modelBuilder.Entity("MiniInventorySystem.Model.Product", b =>
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -123,7 +124,7 @@ namespace MiniInventorySystem.Migrations
                     b.ToTable("Sales");
                 });
 
-            modelBuilder.Entity("MiniInventorySystem.Model.SaleDetails", b =>
+            modelBuilder.Entity("MiniInventorySystem.Model.SaleDetail", b =>
                 {
                     b.Property<int>("SaleDetailId")
                         .ValueGeneratedOnAdd()
@@ -137,9 +138,6 @@ namespace MiniInventorySystem.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductsProductId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18,2)");
 
@@ -148,11 +146,11 @@ namespace MiniInventorySystem.Migrations
 
                     b.HasKey("SaleDetailId");
 
-                    b.HasIndex("ProductsProductId");
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("SaleId");
 
-                    b.ToTable("SaleDetails");
+                    b.ToTable("SaleDetail");
                 });
 
             modelBuilder.Entity("MiniInventorySystem.Model.Sale", b =>
@@ -164,11 +162,11 @@ namespace MiniInventorySystem.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("MiniInventorySystem.Model.SaleDetails", b =>
+            modelBuilder.Entity("MiniInventorySystem.Model.SaleDetail", b =>
                 {
-                    b.HasOne("MiniInventorySystem.Model.Products", "Products")
+                    b.HasOne("MiniInventorySystem.Model.Product", "Products")
                         .WithMany()
-                        .HasForeignKey("ProductsProductId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
