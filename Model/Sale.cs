@@ -6,7 +6,7 @@ namespace MiniInventorySystem.Model
     {
         public Sale()
         {
-            Customer    = new Customer();
+            //Customer    = new Customer();
             SaleDetails = new List<SaleDetail>();
         }
 
@@ -16,7 +16,7 @@ namespace MiniInventorySystem.Model
         public int SaleId { get; set; }
         public DateTime SaleDate { get; set; } = DateTime.UtcNow;
         public int? CustomerId { get; set; }
-        public  Customer Customer { get; set; }
+        //public  Customer Customer { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal PaidAmount { get; set; }
         public decimal DueAmount { get; set; }
